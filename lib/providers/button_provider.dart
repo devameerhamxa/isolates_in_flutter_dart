@@ -1,3 +1,5 @@
+import 'dart:developer';
+import 'dart:isolate';
 import 'package:flutter/foundation.dart';
 
 class ButtonProvider with ChangeNotifier {
@@ -10,7 +12,20 @@ class ButtonProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void incrementButton2() {
+  Future<void> incrementButton2() async {
+    final receivePort = ReceivePort();
+
+    // Create the isolate
+    final isolate = await Isolate.spawn(heavyComputation, receivePort.sendPort);
+
+    // Get the result from the isolate
+    final result = await receivePort.first as double;
+    log('Heavy computation result: $result');
+
+    // Clean up
+    receivePort.close();
+    isolate.kill();
+
     _buttonClickCount += 2;
     notifyListeners();
   }
@@ -25,10 +40,20 @@ class ButtonProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<double> heavyComputation() async {
+  // Static method for isolate
+  static void heavyComputation(SendPort sendPort) {
     var result = 0.0;
-    for (var i = 0; i < 100000000000; i++) {
+    for (var i = 0; i < 1000000000; i++) {
       result += i;
+    }
+    sendPort.send(result);
+  }
+
+  Future<double> testComputation() async {
+    var result = 0.0;
+    for (var i = 0; i < 10000; i++) {
+      result += i;
+      log('Result of heavy computation so far: $result');
     }
     return result;
   }

@@ -1,4 +1,4 @@
-import 'dart:developer';
+// ignore_for_file: void_checks
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -36,19 +36,23 @@ class HomeScreen extends StatelessWidget {
             ),
             Image.asset('assets/gif/dancing-banana.gif'),
             const SizedBox(height: 30),
+
+            // Button 1: Simple Increment
             ElevatedButton(
               onPressed: () {
-                var total = context.read<ButtonProvider>().heavyComputation();
-                log('Result of heavy computation: $total');
+                context.read<ButtonProvider>().testComputation();
               },
               child: const Text('Button 1 (+1)'),
             ),
             const SizedBox(height: 20),
+
+            // Button 2: Heavy Computation in Isolate
             ElevatedButton(
-              onPressed: () {
-                context.read<ButtonProvider>().incrementButton2();
+              onPressed: () async {
+                // Perform heavy computation in isolate
+                await context.read<ButtonProvider>().incrementButton2();
               },
-              child: const Text('Button 2 (+2)'),
+              child: const Text('Button 2 (Heavy Computation)'),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
