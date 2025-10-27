@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/button_provider.dart';
@@ -9,7 +11,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Flutter Isolates'),
+        title: Center(child: const Text('Flutter Isolates')),
         backgroundColor: Colors.blue,
         actions: [
           IconButton(
@@ -32,10 +34,12 @@ class HomeScreen extends StatelessWidget {
                 );
               },
             ),
+            Image.asset('assets/gif/dancing-banana.gif'),
             const SizedBox(height: 30),
             ElevatedButton(
               onPressed: () {
-                context.read<ButtonProvider>().incrementButton1();
+                var total = context.read<ButtonProvider>().heavyComputation();
+                log('Result of heavy computation: $total');
               },
               child: const Text('Button 1 (+1)'),
             ),

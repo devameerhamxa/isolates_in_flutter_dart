@@ -24,4 +24,12 @@ class ButtonProvider with ChangeNotifier {
     _buttonClickCount = 0;
     notifyListeners();
   }
+
+  Future<double> heavyComputation() async {
+    var result = 0.0;
+    for (var i = 0; i < 100000000000; i++) {
+      result += i;
+    }
+    return result;
+  }
 }
